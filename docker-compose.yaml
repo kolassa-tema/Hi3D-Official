@@ -1,0 +1,25 @@
+services:
+  hi3d:
+    shm_size: '20gb'
+    build:
+      context: .
+      args:
+        CUDA_VERSION: 12.5.0
+        CUDA_ARCHITECTURES: 86;89;90
+        OS_VERSION: 22.04
+    command: tail -f /dev/null
+    volumes:
+      - ./:/workspace
+      - capture:/capture
+    deploy:
+      resources:
+        limits:
+          memory: 30G
+        reservations:
+          devices:
+            - count: all
+              capabilities: [gpu]
+    memswap_limit: 64G
+volumes:
+  capture:
+    external: true
